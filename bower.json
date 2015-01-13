@@ -1,0 +1,25 @@
+{
+  "name": "visualstate",
+  "main": "visualstate.js",
+  "version": "0.1.0",
+  "authors": [
+    "Jens Elstner <jens.elstner@technicallyfeasible.com>"
+  ],
+  "description": "Allows you to define visual states to be used by elements on your page and makes switching between them easy. Use sophisticated view states without polluting the model with view code.",
+  "moduleType": [
+    "amd",
+    "globals"
+  ],
+  "keywords": [
+    "mv",
+    "mvvm",
+    "viewstate"
+  ],
+  "license": "MIT",
+  "devDependencies": {
+    "jquery": ">= 1.9.1"
+  },
+  "dependencies": {
+    "jquery": ">= 1.9.1"
+  }
+}
