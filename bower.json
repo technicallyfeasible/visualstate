@@ -2,7 +2,7 @@
   "name": "visualstate",
   "main": [
 		"jquery.visualstate.js",
-		"jquery.visualstate.min.js",
+		"jquery.visualstate.min.js"
 	],
   "version": "0.5.0",
   "authors": [
