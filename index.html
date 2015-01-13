@@ -3,6 +3,7 @@
 	<head>
 		<title>Visual state demo</title>
 		<style type="text/css" rel="stylesheet">
+			body { width: 80%; margin: 0px auto; }
 			.button { 
 				display: inline-block;
 				padding: 10px;
@@ -12,6 +13,7 @@
 				-moz-border-radius: 5px;
 				cursor: pointer;
 			}
+			.hide { display: none; }
 			.row { clear: both; }
 			.cell { 
 				display: inline-block; 
@@ -31,48 +33,71 @@
 				-o-transition: background-color 500ms linear;
 				-ms-transition: background-color 500ms linear;
 				transition: background-color 500ms linear;
+				color: #fff;
 			}
 		</style>
-		<script type="text/javascript" src="bower_components/jquery/dist/jquery.js"></script>
+		<script type="text/javascript" src="bower_components/jquery/dist/jquery.min.js"></script>
 		<script type="text/javascript" src="jquery.visualstate.js"></script>
 	</head>
 	<body>
-		<h2>Switch classes on elements for different states</h2>
-		<p>Style classes can be added or removed when switching between states without having to do that in javascript.</p>
-		<div id="class_demo" class="button">
-			<div class="row">
-				<div class="cell" data-vis-disp-a="addClass:light" data-vis-disp-b="addClass:light" data-vis-disp-c="addClass:light" data-vis-disp-d="addClass:light"></div>
-				<div class="cell" data-vis-disp-a="addClass:light" data-vis-disp-b="addClass:light" data-vis-disp-c="addClass:light" data-vis-disp-d="addClass:light"></div>
-				<div class="cell" data-vis-disp-a="addClass:light" data-vis-disp-b="addClass:light" data-vis-disp-c="addClass:light"></div>
-			</div>
-			<div class="row">
-				<div class="cell" data-vis-disp-a="addClass:light" data-vis-disp-b="addClass:light" data-vis-disp-c="addClass:light" data-vis-disp-d="addClass:light"></div>
-				<div class="cell"></div>
-				<div class="cell" data-vis-disp-a="addClass:light" data-vis-disp-b="addClass:light" data-vis-disp-d="addClass:light"></div>
-			</div>
-			<div class="row">
-				<div class="cell" data-vis-disp-a="addClass:light" data-vis-disp-b="addClass:light" data-vis-disp-c="addClass:light" data-vis-disp-d="addClass:light"></div>
-				<div class="cell" data-vis-disp-a="addClass:light" data-vis-disp-b="addClass:light"></div>
-				<div class="cell" data-vis-disp-a="addClass:light" data-vis-disp-b="addClass:light" data-vis-disp-d="addClass:light"></div>
-			</div>
-			<div class="row">
-				<div class="cell" data-vis-disp-a="addClass:light" data-vis-disp-b="addClass:light" data-vis-disp-c="addClass:light" data-vis-disp-d="addClass:light"></div>
-				<div class="cell"></div>
-				<div class="cell" data-vis-disp-a="addClass:light" data-vis-disp-b="addClass:light" data-vis-disp-d="addClass:light"></div>
-			</div>
-			<div class="row">
-				<div class="cell" data-vis-disp-a="addClass:light" data-vis-disp-b="addClass:light" data-vis-disp-c="addClass:light" data-vis-disp-d="addClass:light"></div>
-				<div class="cell" data-vis-disp-b="addClass:light" data-vis-disp-c="addClass:light" data-vis-disp-d="addClass:light"></div>
-				<div class="cell" data-vis-disp-a="addClass:light" data-vis-disp-b="addClass:light" data-vis-disp-c="addClass:light"></div>
-			</div>
-		</div>
-		<p>Each of those states lights up different elements</p>
-		<div class="button" onclick="$('#class_demo').visualstate('disp', 'a')">State A</div>
-		<div class="button" onclick="$('#class_demo').visualstate('disp', 'b')">State B</div>
-		<div class="button" onclick="$('#class_demo').visualstate('disp', 'c')">State C</div>
-		<div class="button" onclick="$('#class_demo').visualstate('disp', 'd')">State D</div>
-		<div class="button" onclick="$('#class_demo').visualstate('disp', '')">Clear</div>
+		<h1>JQuery visual state plugin demo</h1>
+		<p>The plugin allows you to define visual states and then apply them to any element, allowing for a better separation of complex view changes from the underlying model / viewmodel.</p>
 
+		<h2>Switch classes on elements for different states</h2>
+		<p>Style classes can be added or removed when switching between states without having to do that in javascript. To have a class added or removed for each state you have to assign data attributes. Currently only <b>addClass</b> and <b>removeClass</b> are supported.</p>
+		<pre>
+	&lt;!-- adds the class "light" to this element when switching to the state "a" in group "disp" 
+	     and removes it again when switching to another state in the same group --&gt;
+	&lt;div data-vis-disp-a="addClass:light"&gt;&lt;/div&gt;
+	
+	&lt;!-- removes the class "light" from this element when switching to the state "a" in group "disp"
+	     and adds it again when switching to another state in the same group --&gt;
+	&lt;div class="light" data-vis-disp-a="removeClass:light"&gt;&lt;/div&gt;
+		</pre>
+
+		<div id="class_demo">
+			<p class="" data-vis-disp-="removeClass:hide">No state</p>
+			<p class="hide" data-vis-disp-a="removeClass:hide">State A</p>
+			<p class="hide" data-vis-disp-b="removeClass:hide">State B</p>
+			<p class="hide" data-vis-disp-c="removeClass:hide">State C</p>
+			<p class="hide" data-vis-disp-d="removeClass:hide">State D</p>
+			
+			<div class="button">
+				<div class="row">
+					<div class="cell" data-vis-disp-a="addClass:light" data-vis-disp-b="addClass:light" data-vis-disp-c="addClass:light" data-vis-disp-d="addClass:light"></div>
+					<div class="cell" data-vis-disp-a="addClass:light" data-vis-disp-b="addClass:light" data-vis-disp-c="addClass:light" data-vis-disp-d="addClass:light"></div>
+					<div class="cell" data-vis-disp-a="addClass:light" data-vis-disp-b="addClass:light" data-vis-disp-c="addClass:light"></div>
+				</div>
+				<div class="row">
+					<div class="cell" data-vis-disp-a="addClass:light" data-vis-disp-b="addClass:light" data-vis-disp-c="addClass:light" data-vis-disp-d="addClass:light"></div>
+					<div class="cell"></div>
+					<div class="cell" data-vis-disp-a="addClass:light" data-vis-disp-b="addClass:light" data-vis-disp-d="addClass:light"></div>
+				</div>
+				<div class="row">
+					<div class="cell" data-vis-disp-a="addClass:light" data-vis-disp-b="addClass:light" data-vis-disp-c="addClass:light" data-vis-disp-d="addClass:light"></div>
+					<div class="cell" data-vis-disp-a="addClass:light" data-vis-disp-b="addClass:light"></div>
+					<div class="cell" data-vis-disp-a="addClass:light" data-vis-disp-b="addClass:light" data-vis-disp-d="addClass:light"></div>
+				</div>
+				<div class="row">
+					<div class="cell" data-vis-disp-a="addClass:light" data-vis-disp-b="addClass:light" data-vis-disp-c="addClass:light" data-vis-disp-d="addClass:light"></div>
+					<div class="cell"></div>
+					<div class="cell" data-vis-disp-a="addClass:light" data-vis-disp-b="addClass:light" data-vis-disp-d="addClass:light"></div>
+				</div>
+				<div class="row">
+					<div class="cell" data-vis-disp-a="addClass:light" data-vis-disp-b="addClass:light" data-vis-disp-c="addClass:light" data-vis-disp-d="addClass:light"></div>
+					<div class="cell" data-vis-disp-b="addClass:light" data-vis-disp-c="addClass:light" data-vis-disp-d="addClass:light"></div>
+					<div class="cell" data-vis-disp-a="addClass:light" data-vis-disp-b="addClass:light" data-vis-disp-c="addClass:light"></div>
+				</div>
+			</div>
+
+			<p>Each of those states lights up different elements</p>
+			<div class="button" data-vis-disp-a="addClass:light" onclick="$('#class_demo').visualstate('disp', 'a')">State A</div>
+			<div class="button" data-vis-disp-b="addClass:light" onclick="$('#class_demo').visualstate('disp', 'b')">State B</div>
+			<div class="button" data-vis-disp-c="addClass:light" onclick="$('#class_demo').visualstate('disp', 'c')">State C</div>
+			<div class="button" data-vis-disp-d="addClass:light" onclick="$('#class_demo').visualstate('disp', 'd')">State D</div>
+			<div class="button light" data-vis-disp-="addClass:light" onclick="$('#class_demo').visualstate('disp', '')">Clear</div>
+		</div>
+		
 		<h2>Toggle between two states</h2>
 		<p>Switches between two visual states when clicking the area below.</p>
 		<div id="toggle_demo" class="button" data-vstate-toggle="closed" onclick="$(this).visualstate('toggle', 'closed', 'open')">
@@ -81,7 +106,9 @@
 			Click me again to close this part.
 			</div>
 		</div>
-	
+		
+		<br/><br/><br/><br/>
+		
 		<script type="text/javascript">
 			// define visual states
 			$.fn.visualstate.register({
