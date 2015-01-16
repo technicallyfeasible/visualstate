@@ -1,5 +1,5 @@
 /*!
- * jquery.visualstate.js v0.5.0
+ * jquery.visualstate.js v0.6.0
  * Copyright 2015 Jens Elstner
  * Released under MIT license
  */
