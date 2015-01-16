@@ -30,15 +30,28 @@ If you need more control over what happens when an element is switched to anothe
 		// compact target state
 		"display-compact": {
 			// full source state
-			"display-full": function($p) {
+			"display-full": function($p, context) {
 				// $p is the jquery object for the parent element where the state is set
+				// context is the context object which can be given as 3rd parameter
+			},
+			// called when a transition to the current state is initiated
+			// can be used to update the view with changed context
+			"$update": function($p, context) {
 			}
 		},
 		// full target state
 		"display-full": {
 			// compact source state
-			"display-compact": function($p) {
+			"display-compact": function($p, context) {
 				// $p is the jquery object for the parent element where the state is set
+			},
+			// any source state
+			"display-$all": function($p, context) {
+			}
+		},
+		// called for any target state AFTER the more specific transition function
+		"display-$all": {
+			"display-compact": function($p, context) {
 			}
 		}
 	})
@@ -49,6 +62,18 @@ the next deeper level is the source state and the function assigned to this prop
 
 Each of the transition functions get a single parameter $p which is the jquery object for the parent element where the state is set.
 
+### $all
+
+Special transition functions (__group-$all__) can be defined to capture all source or target states. This is the order in which all of these transitions are executed:
+
+1. source -> target
+2. source -> $all
+3. $all -> target
+
+### $update
+
+The special __group-$update__ source state is called when a transition to the current state is requested and should be used when updating the view with a new context.
+
 
 ## Transition the state of an element
 To transition an element to another state, simply use the .visualstate() function on it.
@@ -58,6 +83,9 @@ To transition an element to another state, simply use the .visualstate() functio
 
 	// set the current visual state from the display group to full
 	$element.visualstate("display", "full");
+
+	// set the current visual state from the display group to full while also giving a context to the transition function
+	$element.visualstate("display", "full", {"someValue": 1} );
 
 	// toggle the visual state between compact and full
 	$element.visualstate("display", "compact", "full");

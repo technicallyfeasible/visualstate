@@ -35,6 +35,19 @@
 				transition: background-color 500ms linear;
 				color: #fff;
 			}
+			.bar { 
+				padding: 2px;
+				border: #000 2px solid;
+				border-radius: 3px;
+				-webkit-border-radius: 3px;
+				-moz-border-radius: 3px;
+				height: 30px;
+			}
+			.bar_inner {
+				background-color: green;
+				width: 0%;
+				height: 100%;
+			}
 		</style>
 		<script type="text/javascript" src="bower_components/jquery/dist/jquery.min.js"></script>
 		<script type="text/javascript" src="jquery.visualstate.js"></script>
@@ -102,12 +115,28 @@
 		
 		<h2>Toggle between two states</h2>
 		<p>Switches between two visual states when clicking the area below.</p>
+		<pre>
+	// 3 parameters: group, state1, state2
+	$(this).visualstate('toggle', 'closed', 'open');
+		</pre>
 		<div id="toggle_demo" class="button" data-vstate-toggle="closed" onclick="$(this).visualstate('toggle', 'closed', 'open')">
 			Click me to toggle
 			<div class="toggle_panel">
 			Click me again to close this part.
 			</div>
 		</div>
+
+		<h2>Update the current view state</h2>
+		<p>Chooses a new random value on each click and then uses the $update origin state to update the view. Relevant context for the view is given as the 3rd parameter.</p>
+		<pre>
+	// 2 or 3 parameters: group, new state, context object (optional)
+	$('#update_demo').visualstate('progress', 'show', { 'progress': Math.round(Math.random() * 100) } );
+		</pre>
+		<div id="update_demo" class="bar">
+			<div class="bar_inner"></div>
+		</div>
+		<br/>
+		<div class="button" onclick="$('#update_demo').visualstate('progress', 'show', {'progress': Math.round(Math.random() * 100) } )">Update</div>
 		
 		<br/><br/><br/><br/>
 		
@@ -142,6 +171,18 @@
 						var height = $panel.height();
 						$panel.css({width: owidth, height: 0});
 						$panel.animate({width: width, height: height}, 300, "swing", function() { $panel.css({width: "", height: ""}); });
+					}
+				},
+				"progress-show": {
+					"$update": function($bar, context) {
+						var val = context.progress;
+						if (val < 0) val = 0;
+						if (val > 100) val = 100;
+						var $inner = $bar.children('.bar_inner');
+						$inner.stop().animate({"width": val + "%"}, 300, "swing");
+					},
+					"progress-": function($bar, context) {
+						this.$update($bar, context);
 					}
 				}
 			}, true);

@@ -59,28 +59,33 @@
 	/**
 	 * Set the state as the current visual for context. Uses document as context when empty.
 	 */
-	var set = function ($parent, prefix, state) {
+	var set = function ($parent, prefix, state, context) {
 		if (!state) state = "";
 		var cur = ($parent.data(c_vstate + prefix) || "");
-		// nothing to do if same state
-		if (cur === state)
+		var pstate = prefix + '-' + state;
+		var targetTrans = visualStates[pstate];
+		// try to call update if state is the same
+		if (cur === state) {
+			var func = targetTrans && targetTrans["$update"];
+			if (typeof func === "function")
+				func.apply(targetTrans, [$parent, context]);
 			return;
+		}
 
 		var pcur = prefix + '-' + cur;
-		var pstate = prefix + '-' + state;
 		
 		// find transition from 'cur' for 'state'
-		var func = visualStates[pstate] && visualStates[pstate][pcur];
+		var func = targetTrans && targetTrans[pcur];
 		if (typeof func === "function")
-			func($parent);
+			func.apply(targetTrans, [$parent, context]);
 		// check for special target state value $all
 		func = visualStates[prefix + c_all] && visualStates[prefix + c_all][pcur];
 		if (typeof func === "function")
-			func($parent);
+			func.apply(visualStates[prefix + c_all], [$parent, context]);
 		// check for special source state value $all
-		func = visualStates[pstate] && visualStates[pstate][prefix + c_all];
+		func = targetTrans && targetTrans[prefix + c_all];
 		if (typeof func === "function")
-			func($parent);
+			func.apply(targetTrans, [$parent, context]);
 
 		// find elements with state instructions
 		var context = this;
@@ -114,8 +119,9 @@
 		// if called without parameters then return current state
 		if (typeof(state1) === "undefined")
 			return get(this, prefix);
-		else if (typeof(state2) === "undefined")
-			set(this, prefix, state1);
+		else if (typeof(state2) !== "string")
+			// if state2 is no string then it is context
+			set(this, prefix, state1, state2);
 		else
 			toggle(this, prefix, state1, state2);
 	};
@@ -126,7 +132,7 @@
 	 */
 	$.fn.visualstate.register = function(visual, apply) {
 		if (!visual) return;
-		visualStates = $.extend(visualStates || {}, visual);
+		visualStates = $.extend(true, visualStates || {}, visual);
 		if (apply) {
 			// find prefixes that were just registered
 			var prefixes = [], prefix, state;
